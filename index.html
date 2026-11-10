@@ -936,12 +936,12 @@
 
                 <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1rem;">
                     <div class="form-group-pl">
-                        <label class="form-label-pl">Universitet / Maktab</label>
-                        <input type="text" name="university" class="form-input-pl">
+                        <label class="form-label-pl">Ta’lim Muassasasi (Ixtiyoriy)</label>
+                        <input type="text" name="university" class="form-input-pl" placeholder="Maktab, litsey, kollej, universitet yoki mustaqil">
                     </div>
                     <div class="form-group-pl">
-                        <label class="form-label-pl">Yosh</label>
-                        <input type="number" name="age" class="form-input-pl" min="12" max="60">
+                        <label class="form-label-pl">Yosh *</label>
+                        <input type="number" name="age" class="form-input-pl" min="10" max="99" required>
                     </div>
                 </div>
 
@@ -984,6 +984,108 @@
         </div>
     </div>
 
+    <!-- Post-Registration Onboarding Modal (Choose Age, Optional Educational Institution, etc.) -->
+    <div class="modal-overlay modal" id="modal-onboarding">
+        <div class="modal-card" style="max-width: 560px;">
+            <div class="modal-header-bar">
+                <div class="modal-title">[ 🎯 PROFILNI SOZLASH // PROFILE ONBOARDING ]</div>
+                <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+            </div>
+            <form id="form-onboarding" class="modal-body">
+                <div style="background: rgba(237, 255, 69, 0.08); border: 1px solid var(--accent-lime); padding: 1rem; margin-bottom: 1.25rem;">
+                    <div style="font-family: var(--font-hero); font-size: 1.15rem; color: var(--accent-lime); text-transform: uppercase;">
+                        Muvaffaqiyatli Ro‘yxatdan O‘tdingiz!
+                    </div>
+                    <div style="font-family: var(--font-tech); font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.35rem; line-height: 1.5;">
+                        Jamoalar sizni yaxshiroq bilishi va mos loyihalarni taklif qilishi uchun yoshingiz va ma’lumotlaringizni to‘ldiring.
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 1rem;">
+                    <!-- Age is mandatory -->
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Yoshingiz (Yosh) *</label>
+                        <select name="age" class="form-select-pl" required>
+                            <option value="">-- Yoshingizni tanlang * --</option>
+                            <option value="14">14 yosh</option>
+                            <option value="15">15 yosh</option>
+                            <option value="16">16 yosh</option>
+                            <option value="17">17 yosh</option>
+                            <option value="18">18 yosh</option>
+                            <option value="19">19 yosh</option>
+                            <option value="20">20 yosh</option>
+                            <option value="21">21 yosh</option>
+                            <option value="22">22 yosh</option>
+                            <option value="23">23 yosh</option>
+                            <option value="24">24 yosh</option>
+                            <option value="25">25 yosh</option>
+                            <option value="26">26+ yosh</option>
+                        </select>
+                    </div>
+
+                    <!-- Educational Institution: Optional per user requirement -->
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Ta’lim Muassasasi (Ixtiyoriy)</label>
+                        <input type="text" name="university" class="form-input-pl" placeholder="Maktab, litsey, kollej, universitet yoki mustaqil">
+                    </div>
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Asosiy Qiziqish / Yo‘nalishingiz *</label>
+                    <select name="direction" class="form-select-pl" required>
+                        <option value="IT">IT & Dasturlash</option>
+                        <option value="AI">Sun’iy Intellekt va Katta Ma’lumotlar</option>
+                        <option value="Ecology">Ekologiya va Yashil Texnologiyalar</option>
+                        <option value="Education">Ta’lim va Fan (EdTech)</option>
+                        <option value="Robotics">Robototexnika va Muhandislik</option>
+                        <option value="Medicine">Tibbiyot va Sog‘liqni Saqlash</option>
+                        <option value="Agro">Qishloq Xo‘jaligi va Agrotex</option>
+                        <option value="Fintech">Moliya va FinTech</option>
+                        <option value="Media">Media va Kreativ San’at</option>
+                        <option value="Energy">Muqobil Energiya</option>
+                        <option value="Social">Ijtimoiy Tashabbuslar</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Rolingiz / Unvoningiz *</label>
+                        <input type="text" name="title" class="form-input-pl" value="Yosh Tashabbuskor" placeholder="Masalan: Frontendchi, Dizayner" required>
+                    </div>
+
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Hududingiz (Shahar / Viloyat)</label>
+                        <select name="location" class="form-select-pl">
+                            <option value="Toshkent">Toshkent shahri</option>
+                            <option value="Toshkent viloyati">Toshkent viloyati</option>
+                            <option value="Samarqand">Samarqand</option>
+                            <option value="Farg‘ona">Farg‘ona</option>
+                            <option value="Andijon">Andijon</option>
+                            <option value="Namangan">Namangan</option>
+                            <option value="Buxoro">Buxoro</option>
+                            <option value="Xorazm">Xorazm</option>
+                            <option value="Qashqadaryo">Qashqadaryo</option>
+                            <option value="Surxondaryo">Surxondaryo</option>
+                            <option value="Navoiy">Navoiy</option>
+                            <option value="Jizzax">Jizzax</option>
+                            <option value="Sirdaryo">Sirdaryo</option>
+                            <option value="Qoraqalpog‘iston">Qoraqalpog‘iston Respublikasi</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Qisqacha Bio (O‘zingiz haqingizda - Ixtiyoriy)</label>
+                    <textarea name="bio" rows="2" class="form-textarea-pl" placeholder="Qiziqishlaringiz va qanday jamoalarda qatnashmoqchi ekanligingiz haqida..."></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+                    <button type="submit" class="pl-btn pl-btn-lime">[ PROFILNI YAKUNLASH VA DAVOM ETISH ] &rarr;</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Notification Toast Container -->
     <div class="toast-container" id="toast-container"></div>
 
@@ -994,7 +1096,7 @@
                 <div>
                     <div class="footer-brand-title">PROJECTLINK // PLATFORM</div>
                     <p class="footer-desc">
-                        O‘zbekistondagi o‘quvchilar va talabalar uchun mahalliy loyihalar, jamoa tuzish va amaliy ko‘nikmalarni rivojlantirish platformasi. IT va Ekologiya sohalaridagi ilg‘or tashabbuslarni birlashtiradi.
+                        O‘zbekistondagi o‘quvchilar va talabalar uchun mahalliy loyihalar, jamoa tuzish va amaliy ko‘nikmalarni rivojlantirish platformasi. 11 ta strategik yo‘nalishdagi ilg‘or tashabbuslarni birlashtiradi.
                     </p>
                 </div>
                 

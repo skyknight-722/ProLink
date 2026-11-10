@@ -426,11 +426,11 @@ async function handleRegister(e) {
     password,
     role,
     title: 'Yosh Tashabbuskor / Dasturchi',
-    university: 'O‘zbekiston Ta’lim Muassasasi',
+    university: '', // Optional educational institution
     location: 'Toshkent, O‘zbekiston',
-    age: 20,
-    bio: 'ProjectLink a’zosi. Yoshlar loyihalariga qiziqadi va amaliy jamoalarda qatnashadi.',
-    skills: ['Teamwork', 'Communication'],
+    age: null, // User must choose in onboarding step
+    bio: '',
+    skills: ['Jamoaviy ish', 'Muloqot'],
     github: '',
     telegram: '',
     portfolio: '',
@@ -452,6 +452,11 @@ async function handleRegister(e) {
   renderProjects();
 
   showToast(`Ro‘yxatdan o‘tish muvaffaqiyatli yakunlandi! Xush kelibsiz, ${newUser.name}.`, 'success');
+
+  // Requirement: After registration the user must choose his age and etc.
+  setTimeout(() => {
+    openOnboardingModal(newUser);
+  }, 350);
 }
 
 function handleLogout() {
@@ -905,7 +910,7 @@ function renderAdminPanel() {
                 <th>Foydalanuvchi</th>
                 <th>Email</th>
                 <th>Rol</th>
-                <th>Universitet / Ta’lim</th>
+                <th>Ta’lim Muassasasi</th>
                 <th>Holat</th>
                 <th>Verifikatsiya</th>
                 <th style="text-align: right;">Amallar</th>
@@ -933,7 +938,7 @@ function renderAdminPanel() {
                   </td>
                   <td>
                     <span style="font-family: var(--font-tech); font-size: 0.75rem; color: var(--text-muted);">
-                      ${escapeHTML(u.university || '—')}
+                      ${escapeHTML(u.university || 'Ko‘rsatilmagan')}
                     </span>
                   </td>
                   <td>
@@ -1350,8 +1355,8 @@ function renderUserProfile() {
             <span class="profile-field-val">${escapeHTML(user.email || '—')}</span>
           </div>
           <div class="profile-field-row">
-            <span class="profile-field-label">Universitet:</span>
-            <span class="profile-field-val">${escapeHTML(user.university || '—')}</span>
+            <span class="profile-field-label">Ta’lim Muassasasi:</span>
+            <span class="profile-field-val">${escapeHTML(user.university || 'Ko‘rsatilmagan (Ixtiyoriy)')}</span>
           </div>
           <div class="profile-field-row">
             <span class="profile-field-label">Manzil:</span>
@@ -1359,7 +1364,7 @@ function renderUserProfile() {
           </div>
           <div class="profile-field-row">
             <span class="profile-field-label">Yosh:</span>
-            <span class="profile-field-val">${user.age ? user.age + ' yosh' : '—'}</span>
+            <span class="profile-field-val">${user.age ? user.age + ' yosh' : 'Ko‘rsatilmagan'}</span>
           </div>
           <div class="profile-field-row">
             <span class="profile-field-label">A’zo bo‘lgan:</span>
@@ -1882,11 +1887,99 @@ function handleSaveProfile(e) {
 
   addLog('PROFILE_EDIT', `${user.name} profili yangilandi`);
   saveState();
+
+  if (window.supabaseAdapter && window.supabaseAdapter.isConfigured()) {
+    const isUserUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id);
+    if (isUserUuid) {
+      window.supabaseAdapter.updateProfile(user.id, {
+        name: user.name,
+        title: user.title,
+        university: user.university,
+        location: user.location,
+        age: user.age,
+        bio: user.bio,
+        skills: user.skills,
+        telegram: user.telegram,
+        github: user.github,
+        portfolio: user.portfolio
+      }).catch(err => console.warn('[SUPABASE] Profile update error:', err));
+    }
+  }
+
   closeAllModals();
   updateHeaderRoleDisplay();
   renderUserProfile();
   renderProjects();
   showToast('Profilingiz muvaffaqiyatli saqlandi!', 'success');
+}
+
+// Requirement: After registration the user must choose his age and etc.
+// Educational institution is optional.
+function openOnboardingModal(user) {
+  const modal = document.getElementById('modal-onboarding');
+  if (!modal) return;
+  const form = document.getElementById('form-onboarding');
+  if (form && user) {
+    if (form.age) form.age.value = user.age || '';
+    if (form.university) form.university.value = user.university || '';
+    if (form.title && user.title) form.title.value = user.title;
+    if (form.location && user.location) form.location.value = user.location;
+    if (form.bio && user.bio) form.bio.value = user.bio;
+  }
+  modal.classList.add('active');
+}
+
+function handleSaveOnboarding(e) {
+  e.preventDefault();
+  const form = e.target;
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const ageVal = parseInt(form.age.value, 10);
+  if (!ageVal || isNaN(ageVal)) {
+    showToast('Iltimos, yoshingizni tanlang!', 'error');
+    return;
+  }
+
+  const universityVal = form.university ? form.university.value.trim() : '';
+  const directionVal = form.direction ? form.direction.value : 'IT';
+  const titleVal = form.title ? form.title.value.trim() : user.title;
+  const locationVal = form.location ? form.location.value : user.location;
+  const bioVal = form.bio ? form.bio.value.trim() : '';
+
+  user.age = ageVal;
+  user.university = universityVal; // Optional educational institution
+  user.title = titleVal || user.title;
+  user.location = locationVal || user.location;
+  if (bioVal) user.bio = bioVal;
+
+  if (directionVal && !user.skills.includes(directionVal)) {
+    user.skills.unshift(directionVal);
+  }
+
+  addLog('PROFILE_ONBOARDING', `${user.name} yoshi (${user.age}) va ta’lim muassasasi sozlandi`);
+  saveState();
+
+  if (window.supabaseAdapter && window.supabaseAdapter.isConfigured()) {
+    const isUserUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id);
+    if (isUserUuid) {
+      window.supabaseAdapter.updateProfile(user.id, {
+        age: user.age,
+        university: user.university,
+        title: user.title,
+        location: user.location,
+        bio: user.bio,
+        skills: user.skills
+      }).catch(err => console.warn('[SUPABASE] Onboarding sync error:', err));
+    }
+  }
+
+  closeAllModals();
+  updateHeaderRoleDisplay();
+  renderUserProfile();
+  renderProjects();
+  switchView('profile');
+  showToast(`Profilingiz to‘liq sozlandi! Xush kelibsiz, ${user.name}.`, 'success');
 }
 
 function closeAllModals() {
@@ -2003,6 +2096,9 @@ function init() {
 
   const formWelcomeRegister = document.getElementById('form-welcome-register');
   if (formWelcomeRegister) formWelcomeRegister.addEventListener('submit', handleRegister);
+
+  const formOnboarding = document.getElementById('form-onboarding');
+  if (formOnboarding) formOnboarding.addEventListener('submit', handleSaveOnboarding);
 
   // Close modals on escape key or backdrop click
   document.addEventListener('keydown', (e) => {
@@ -2538,6 +2634,8 @@ window.switchInstallTab = switchInstallTab;
 window.copyTerminalCommand = copyTerminalCommand;
 window.exportDataJSON = exportDataJSON;
 window.showToast = showToast;
+window.openOnboardingModal = openOnboardingModal;
+window.handleSaveOnboarding = handleSaveOnboarding;
 window.openProjectChat = openProjectChat;
 window.switchDiscordChannel = switchDiscordChannel;
 window.handleSendDiscordMessage = handleSendDiscordMessage;
