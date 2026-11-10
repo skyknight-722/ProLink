@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Secure Gateway // ProjectLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #04051a;
+            padding: 1.5rem;
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(0, 0, 242, 0.45), transparent 60%),
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .admin-auth-box {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(8, 10, 38, 0.95);
+            border: 1px solid rgba(237, 255, 69, 0.4);
+            box-shadow: 0 0 50px rgba(0, 0, 242, 0.5), 0 20px 60px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-auth-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #edff45;
+        }
+
+        .admin-auth-header {
+            padding: 2rem 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 160, 0.25);
+        }
+
+        .admin-badge-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: #edff45;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .admin-auth-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            line-height: 1.1;
+            color: #ffffff;
+        }
+
+        .admin-auth-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.4rem;
+        }
+
+        .admin-auth-body {
+            padding: 2rem;
+        }
+
+        .admin-form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .admin-form-label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 0.45rem;
+        }
+
+        .admin-form-input {
+            width: 100%;
+            background: rgba(4, 5, 26, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            padding: 0.75rem 1rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .admin-form-input:focus {
+            border-color: #edff45;
+            box-shadow: 0 0 12px rgba(237, 255, 69, 0.3);
+            background: rgba(4, 5, 26, 0.95);
+        }
+
+        .admin-submit-btn {
+            width: 100%;
+            background: #edff45;
+            color: #04051a;
+            border: none;
+            padding: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            margin-top: 0.75rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .admin-submit-btn:hover {
+            background: #ffffff;
+            box-shadow: 0 0 20px rgba(237, 255, 69, 0.5);
+        }
+
+        .admin-notice {
+            margin-top: 1.5rem;
+            padding: 0.9rem;
+            background: rgba(237, 255, 69, 0.08);
+            border-left: 3px solid #edff45;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .admin-back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .admin-back-link:hover {
+            color: #edff45;
+        }
+
+        .alert-error {
+            display: none;
+            background: rgba(244, 63, 94, 0.15);
+            border: 1px solid #f43f5e;
+            color: #f43f5e;
+            padding: 0.75rem 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            margin-bottom: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-auth-box">
+        <div class="admin-auth-header">
+            <div class="admin-badge-strip">
+                <span><i class="fas fa-shield-alt"></i> RESTRICTED ACCESS</span>
+                <span>SECURE ACCESS</span>
+            </div>
+            <h1 class="admin-auth-title">ADMIN GATEWAY</h1>
+            <div class="admin-auth-subtitle">// YASHIRIN ADMINISTRATOR PORTALI (LINK ORQALI)</div>
+        </div>
+
+        <div class="admin-auth-body">
+            <div id="error-msg" class="alert-error">
+                <i class="fas fa-exclamation-triangle"></i> <span id="error-text"></span>
+            </div>
+
+            <form id="admin-login-form">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Admin Email *</label>
+                    <input type="email" id="admin-email" class="admin-form-input" value="admin@projectlink.uz" required autocomplete="username">
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Admin Parol *</label>
+                    <input type="password" id="admin-password" class="admin-form-input" value="admin123" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="admin-submit-btn">
+                    <i class="fas fa-key"></i> [ TIZIMGA KIRISH ] &rarr;
+                </button>
+            </form>
+
+            <div class="admin-notice">
+                <i class="fas fa-lock"></i> <strong>Eslatma:</strong> Ushbu sahifa umumiy saytda ko‘rsatilmaydi va faqat to‘g‘ridan-to‘g‘ri havola (link) orqali ochiladi. Tizimga muvaffaqiyatli kirilgandan so‘ng administrator paneli faollashadi.
+            </div>
+
+            <a href="index.html" class="admin-back-link">
+                &larr; Asosiy sahifaga qaytish
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const STATE_KEY = 'projectlink_platform_state_v3';
+
+        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value.trim().toLowerCase();
+            const password = document.getElementById('admin-password').value.trim();
+            const errorBox = document.getElementById('error-msg');
+            const errorText = document.getElementById('error-text');
+
+            errorBox.style.display = 'none';
+
+            let state = null;
+            try {
+                const raw = localStorage.getItem(STATE_KEY);
+                if (raw) state = JSON.parse(raw);
+            } catch(err) {
+                console.warn(err);
+            }
+
+            if (!state || !state.users) {
+                state = {
+                    currentUserId: 'usr_admin',
+                    currentView: 'admin',
+                    users: [
+                        {
+                            id: 'usr_admin',
+                            name: 'Platform Administrator',
+                            email: 'admin@projectlink.uz',
+                            password: 'admin123',
+                            role: 'admin',
+                            status: 'Active',
+                            avatarInitials: 'PA'
+                        }
+                    ],
+                    projects: [],
+                    applications: [],
+                    logs: []
+                };
+            }
+
+            // Find admin user
+            const adminUser = state.users.find(u => 
+                u.email.toLowerCase() === email && 
+                u.password === password && 
+                u.role === 'admin'
+            );
+
+            if (!adminUser && !(email === 'admin@projectlink.uz' && password === 'admin123')) {
+                errorBox.style.display = 'block';
+                errorText.textContent = 'Noto‘g‘ri ma’lumotlar yoki bu hisob administrator huquqiga ega emas!';
+                return;
+            }
+
+            const targetId = adminUser ? adminUser.id : 'usr_admin';
+            state.currentUserId = targetId;
+            state.currentView = 'admin';
+            
+            try {
+                localStorage.setItem(STATE_KEY, JSON.stringify(state));
+            } catch(err) {
+                console.error(err);
+            }
+
+            // Redirect to index.html#admin
+            window.location.href = 'index.html#admin';
+        });
+    </script>
+</body>
+</html>

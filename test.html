@@ -1,0 +1,113 @@
+<!-- ProjectLink Web App - Standalone Test Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjectLink Web App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container" style="padding: 40px 0; text-align: center;">
+        <h1 style="margin-bottom: 20px; color: var(--primary);">
+            <i class="fas fa-project-diagram"></i> ProjectLink Web App
+        </h1>
+        <p style="color: var(--text-secondary); margin-bottom: 30px;">Modern, dark-themed web application for student project collaboration</p>
+        
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto;">
+            <h2>Features</h2>
+            <ul style="text-align: left; margin: 20px 0; color: var(--text-secondary);">
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> Responsive design with dark theme</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> Project filtering and search</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> User authentication (login/register)</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> Project application system</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> Contact form</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> Smooth animations and transitions</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> Mobile-friendly navigation</li>
+            </ul>
+            
+            <div style="margin-top: 30px;">
+                <a href="index.html" style="display: inline-block; padding: 12px 24px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; margin: 5px; transition: transform 0.3s ease;">
+                    View Main App <i class="fas fa-arrow-right"></i>
+                </a>
+                <button onclick="testFunctionality()" style="display: inline-block; padding: 12px 24px; background: transparent; color: var(--primary); border: 1px solid var(--primary); text-decoration: none; border-radius: 8px; margin: 5px; cursor: pointer; transition: transform 0.3s ease;">
+                    Test JavaScript <i class="fas fa-flask"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px;">
+            <p style="color: var(--text-muted); font-size: 14px;">ProjectLink Web Application • Version 1.0</p>
+        </div>
+    </div>
+
+    <!-- Modals for testing -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAllModals()">&times;</button>
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAllModals()">&times;</button>
+            <h2>Register</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="reg-name">Full Name</label>
+                    <input type="text" id="reg-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm">Confirm Password</label>
+                    <input type="password" id="reg-confirm" name="confirm-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple test functions
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            document.body.style.overflow = 'auto';
+        }
+
+        function testFunctionality() {
+            const status = document.createElement('div');
+            status.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 30px; z-index: 3000; text-align: center;';
+            status.innerHTML = '<h3>Testing ProjectLink...</h3><p>JavaScript is working correctly!</p><button onclick="this.parentElement.remove()">Close</button>';
+            document.body.appendChild(status);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('ProjectLink Test Page Loaded');
+        });
+    </script>
+</body>
+</html>

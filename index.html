@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;">
+    <title>ProjectLink — Yoshlar Loyihalari Ekotizimi | IT & Ekologiya</title>
+    <meta name="description" content="ProjectLink — O‘zbekistonlik o‘quvchilar va talabalar uchun mahalliy loyihalar, jamoa a’zolarini topish va IT hamda Ekologiya yo‘nalishlarida amaliy tajriba platformasi.">
+    
+    <!-- Modern Technical Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Oswald:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Supabase Client & Configuration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+</head>
+<body>
+
+    <!-- Pinned Navigation Header -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Brand on the Left (Moved per user request) -->
+            <div class="header-brand" onclick="switchView('main')" title="Bosh sahifaga qaytish">
+                <div class="brand-title">
+                    <span>PROJECT</span>
+                    <span>LINK</span>
+                </div>
+                <div class="brand-sub">YOSHLAR LOYIHALARI PLATFORMASI</div>
+            </div>
+
+            <!-- Right Navigation Tabs & Auth Actions -->
+            <div class="header-nav-actions">
+                <nav class="nav-views">
+                    <button class="nav-tab-btn active" data-view="main" onclick="switchView('main')">
+                        <i class="fas fa-home"></i> Main
+                    </button>
+                    <button class="nav-tab-btn" data-view="projects" onclick="switchView('projects')">
+                        <i class="fas fa-cubes"></i> Projects
+                    </button>
+                    <button class="nav-tab-btn" data-view="about" onclick="switchView('about')">
+                        <i class="fas fa-info-circle"></i> About
+                    </button>
+                    <button class="nav-tab-btn" data-view="profile" id="nav-profile-btn" onclick="switchView('profile')" style="display: none;">
+                        <i class="fas fa-user-circle"></i> Profile
+                    </button>
+                    <!-- Admin Panel access: Only visible when logged in as admin via direct link -->
+                    <button class="nav-tab-btn" data-view="admin" id="nav-admin-btn" onclick="switchView('admin')" style="display: none;">
+                        <i class="fas fa-shield-alt"></i> Admin Panel
+                    </button>
+                </nav>
+
+                <button class="pl-btn pl-btn-paper pl-btn-sm" onclick="openCreateProjectModal()">
+                    <i class="fas fa-plus"></i> Post Project
+                </button>
+
+                <!-- Authentication Header Container (Login / Register / User badge) -->
+                <div class="header-auth-group" id="header-auth-container">
+                    <!-- Injected by updateHeaderRoleDisplay() in js/app.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Views Container -->
+    <main>
+        <!-- ================================================================== -->
+        <!-- VIEW 1: MAIN TAB (Home, Highlights, Tracks & Platform Features)    -->
+        <!-- ================================================================== -->
+        <div class="view-wrapper active" id="view-main">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="container hero-grid">
+                    <div class="hero-copy">
+                        <div class="hero-tagline">
+                            <span class="beacon-dot"></span>
+                            PROJECTLINK ENGINE &middot; YOSHLAR EKOTIZIMI
+                        </div>
+                        
+                        <h1 class="hero-title">
+                            THE NETWORK<br>
+                            THAT GROWS<br>
+                            <em>WITH YOU</em>
+                        </h1>
+
+                        <p class="hero-description">
+                            O‘zbekistondagi intiluvchan o‘quvchilar va talabalar uchun mahalliy loyihalar, jamoa a’zolarini topish va amaliy tajriba to‘plash platformasi. O‘z loyihangizni e’lon qiling yoki IT va Ekologiya yo‘nalishlaridagi faol jamoalarga qo‘shiling.
+                        </p>
+
+                        <div class="hero-actions">
+                            <button class="pl-btn pl-btn-paper" onclick="switchView('projects')">
+                                Loyihalarni ko‘rish &rarr;
+                            </button>
+                            <button class="pl-btn pl-btn-lime" onclick="openCreateProjectModal()">
+                                [ + LOYIHA E’LON QILISH ]
+                            </button>
+                            <button class="pl-btn pl-btn-ghost" onclick="switchView('about')">
+                                <i class="fas fa-info-circle"></i> Platforma Haqida
+                            </button>
+                        </div>
+
+                        <!-- Interactive Terminal Installer Box -->
+                        <div class="terminal-card">
+                            <div class="terminal-header">
+                                <div class="terminal-title">
+                                    <i class="fas fa-terminal"></i>
+                                    <span>TERMINAL GATEWAY // FAST CONNECT</span>
+                                </div>
+                                <div class="terminal-tabs">
+                                    <button class="terminal-tab active" data-tab="channel" onclick="switchInstallTab('channel')">:Telegram Kanal:</button>
+                                    <button class="terminal-tab" data-tab="bot" onclick="switchInstallTab('bot')">:Telegram Bot:</button>
+                                </div>
+                            </div>
+                            <div class="terminal-body">
+                                <div class="terminal-code">
+                                    <span class="terminal-prompt">$</span><span id="terminal-hero-command">https://t.me/projectlink_uz</span>
+                                </div>
+                                <div class="terminal-actions">
+                                    <button class="terminal-copy-btn" onclick="copyTerminalCommand()" title="Havolani nusxalash">
+                                        <i class="far fa-copy"></i> Nusxalash
+                                    </button>
+                                    <a id="terminal-open-btn" href="https://t.me/projectlink_uz" target="_blank" rel="noopener noreferrer" class="terminal-open-btn" title="To'g'ridan-to'g'ri ochish">
+                                        <i class="fas fa-external-link-alt"></i> Ochish
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Telemetry Art Showcase -->
+                    <div class="telemetry-preview-card">
+                        <div class="preview-badge">
+                            <span class="beacon-dot"></span> LIVE ECOSYSTEM TELEMETRY
+                        </div>
+
+                        <div class="preview-grid">
+                            <div class="preview-stat-box">
+                                <div class="preview-stat-value">11</div>
+                                <div class="preview-stat-label">Yo‘nalishdagi Loyihalar</div>
+                            </div>
+                            <div class="preview-stat-box">
+                                <div class="preview-stat-value">1,400+</div>
+                                <div class="preview-stat-label">Talaba va Dasturchilar</div>
+                            </div>
+                            <div class="preview-stat-box">
+                                <div class="preview-stat-value">100%</div>
+                                <div class="preview-stat-label">Ochiq Ekotizim</div>
+                            </div>
+                            <div class="preview-stat-box">
+                                <div class="preview-stat-value" id="preview-total-projects">0</div>
+                                <div class="preview-stat-label">Umumiy Loyihalar Soni</div>
+                            </div>
+                        </div>
+
+                        <div class="preview-active-stream">
+                            <div class="stream-row">
+                                <span>11 DIRECTIONS CLASSIFIER</span>
+                                <span class="stream-status-ok">[ ACTIVE ]</span>
+                            </div>
+                            <div class="stream-row">
+                                <span>STUDENT REGISTRY & PROFILE</span>
+                                <span class="stream-status-ok">[ SYNCED ]</span>
+                            </div>
+                            <div class="stream-row">
+                                <span>CREATOR-MANAGED APPLICATIONS</span>
+                                <span class="stream-status-ok">[ SECURE ]</span>
+                            </div>
+                            <div class="stream-row">
+                                <span>PROJECT COLLABORATION ENGINE</span>
+                                <span class="stream-status-ok">[ READY ]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stat Strip -->
+            <section class="stat-strip">
+                <div class="container stat-strip-grid">
+                    <div class="stat-cell">
+                        <div class="stat-cell-num">14-22 <span>YOSH</span></div>
+                        <div class="stat-cell-label">Asosiy Auditoriya &middot; O‘quvchilar va Talabalar</div>
+                    </div>
+                    <div class="stat-cell">
+                        <div class="stat-cell-num">100% <span>OCHIQ</span></div>
+                        <div class="stat-cell-label">Real loyihalarda amaliy ko‘nikma va portfolio</div>
+                    </div>
+                    <div class="stat-cell">
+                        <div class="stat-cell-num">11 <span>YO‘NALISH</span></div>
+                        <div class="stat-cell-label">IT, AI, Ta'lim, Ekologiya, Startup va boshqalar</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11 Core Directions Showcase Grid on Main Page (From Photo 4) -->
+            <section class="container" style="padding: 3.5rem var(--hw-teams-pad-x) 1.5rem;">
+                <div class="directions-section-header">
+                    <div class="section-label">:STRATEGIK YO‘NALISHLAR:</div>
+                    <h2 class="section-title">ProjectLink Asosiy Yo‘nalishlari</h2>
+                    <p class="section-subtitle">O‘zbekistonlik yoshlar, talabalar va o‘quvchilar uchun barcha sohalardagi faol loyihalar katalogi.</p>
+                </div>
+
+                <div class="directions-grid">
+                    <!-- 1. IT & Dasturlash -->
+                    <div class="direction-card" onclick="filterByDirection('IT')">
+                        <div class="direction-icon-wrap" style="color: #38bdf8;">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">&lt;/&gt; IT & Dasturlash</h3>
+                            <p class="direction-desc">Web-saytlar, mobil ilovalar, botlar, platformalar</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. AI & Data Science -->
+                    <div class="direction-card" onclick="filterByDirection('AI')">
+                        <div class="direction-icon-wrap" style="color: #a855f7;">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">🧠 AI & Data Science</h3>
+                            <p class="direction-desc">Sun’iy intellekt, ML, chatbotlar, data analysis</p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Ta'lim & Ilm-fan -->
+                    <div class="direction-card" onclick="filterByDirection('Education')">
+                        <div class="direction-icon-wrap" style="color: #3b82f6;">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">🎓 Ta’lim & Ilm-fan</h3>
+                            <p class="direction-desc">EdTech, olimpiadalar, ilmiy tadqiqotlar</p>
+                        </div>
+                    </div>
+
+                    <!-- 4. Ekologiya & Agrotech -->
+                    <div class="direction-card" onclick="filterByDirection('Ecology')">
+                        <div class="direction-icon-wrap" style="color: #10b981;">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">🌱 Ekologiya & Agrotech</h3>
+                            <p class="direction-desc">Atrof-muhit, qayta ishlash, qishloq xo‘jaligi</p>
+                        </div>
+                    </div>
+
+                    <!-- 5. Volontyorlik & Social Impact -->
+                    <div class="direction-card" onclick="filterByDirection('Social')">
+                        <div class="direction-icon-wrap" style="color: #f43f5e;">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">🤝 Volontyorlik & Social Impact</h3>
+                            <p class="direction-desc">Xayriya, yoshlar tashabbuslari, jamiyatga foyda</p>
+                        </div>
+                    </div>
+
+                    <!-- 6. Startup & Biznes -->
+                    <div class="direction-card" onclick="filterByDirection('Startup')">
+                        <div class="direction-icon-wrap" style="color: #f59e0b;">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">🚀 Startup & Biznes</h3>
+                            <p class="direction-desc">Yangi mahsulotlar, tadbirkorlik, biznes loyihalar</p>
+                        </div>
+                    </div>
+
+                    <!-- 7. Media & Kreativ -->
+                    <div class="direction-card" onclick="filterByDirection('Media')">
+                        <div class="direction-icon-wrap" style="color: #ec4899;">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">🎬 Media & Kreativ</h3>
+                            <p class="direction-desc">Mobilografiya, dizayn, kontent, SMM, jurnalistika</p>
+                        </div>
+                    </div>
+
+                    <!-- 8. Muhandislik & Robototexnika -->
+                    <div class="direction-card" onclick="filterByDirection('Robotics')">
+                        <div class="direction-icon-wrap" style="color: #06b6d4;">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">🤖 Muhandislik & Robototexnika</h3>
+                            <p class="direction-desc">Robotlar, elektronika, IoT, dronlar</p>
+                        </div>
+                    </div>
+
+                    <!-- 9. Sog'liq & Sport -->
+                    <div class="direction-card" onclick="filterByDirection('Health')">
+                        <div class="direction-icon-wrap" style="color: #ef4444;">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">❤️ Sog‘liq & Sport</h3>
+                            <p class="direction-desc">HealthTech, salomatlik va sport tashabbuslari</p>
+                        </div>
+                    </div>
+
+                    <!-- 10. Shahar & Transport -->
+                    <div class="direction-card" onclick="filterByDirection('Urban')">
+                        <div class="direction-icon-wrap" style="color: #14b8a6;">
+                            <i class="fas fa-city"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">🏙️ Shahar & Transport</h3>
+                            <p class="direction-desc">Urbanistika, jamoat transporti, Smart City</p>
+                        </div>
+                    </div>
+
+                    <!-- 11. Madaniyat & San'at -->
+                    <div class="direction-card" onclick="filterByDirection('Culture')">
+                        <div class="direction-icon-wrap" style="color: #eab308;">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="direction-info">
+                            <h3 class="direction-title">🎨 Madaniyat & San’at</h3>
+                            <p class="direction-desc">Musiqa, teatr, ijodiy va madaniy loyihalar</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5 Core Pillars Section -->
+            <section class="features-container" id="pillars">
+                <div class="container">
+                    <div class="section-label">:ASOSIY TAMOYILLAR:</div>
+                    <h2 class="section-title">Ekotizim Qanday Ishlaydi</h2>
+                    <p class="section-subtitle">Talabalar va yosh iqtidorlar uchun qurilgan 5 ta asosiy imkoniyat.</p>
+
+                    <div class="pl-pillars-grid">
+                        <div class="pillar-card">
+                            <div class="pillar-num">#1 CONNECT</div>
+                            <h3 class="pillar-title">Loyiha Ichki Chati</h3>
+                            <p class="pillar-desc">Har bir loyiha ichida alohida tematik kanallar orqali jamoangiz bilan bevosita va tezkor muloqot olib boring.</p>
+                        </div>
+
+                        <div class="pillar-card">
+                            <div class="pillar-num">#2 REMEMBER</div>
+                            <h3 class="pillar-title">Doimiy Xotira</h3>
+                            <p class="pillar-desc">Bajarilgan har bir vazifa, yozilgan kod va o‘rganilgan ko‘nikmalar profilingizda qoladi va portfolioingizni shakllantiradi.</p>
+                        </div>
+
+                        <div class="pillar-card">
+                            <div class="pillar-num">#3 SCHEDULE</div>
+                            <h3 class="pillar-title">Rejali Rivojlanish</h3>
+                            <p class="pillar-desc">Jamoa yig‘ilishlari, sprintlar va topshiriq muddatlari avtomatik tarzda eslatib turiladi.</p>
+                        </div>
+
+                        <div class="pillar-card">
+                            <div class="pillar-num">#4 DELEGATE</div>
+                            <h3 class="pillar-title">Jamoaviy Taqsimot</h3>
+                            <p class="pillar-desc">Loyiha tashabbuskori vazifalarni dasturchi, dizayner va tadqiqotchi o‘rtasida aniq va shaffof taqsimlaydi.</p>
+                        </div>
+
+                        <div class="pillar-card">
+                            <div class="pillar-num">#5 IMPACT</div>
+                            <h3 class="pillar-title">Real Natijalar</h3>
+                            <p class="pillar-desc">Barcha 11 ta strategik yo‘nalish bo‘yicha jamiyat va iqtisodiyotga real foyda keltiruvchi amaliy mahsulotlar hamda innovatsion yechimlar yaratish imkoniyati.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 2: PROJECTS TAB (Dedicated Projects Catalog & Filtering)      -->
+        <!-- ================================================================== -->
+        <div class="view-wrapper" id="view-projects">
+            <section class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+                <div class="section-header-block">
+                    <div>
+                        <div class="section-label">
+                            <i class="fas fa-cubes"></i> ACTIVE DEPLOYMENTS // LOYIHALAR KATALOGI
+                        </div>
+                        <h2 class="section-title">Mavjud Loyihalar</h2>
+                        <p class="section-subtitle">Real jamoalarga qo‘shiling yoki IT va Ekologiya sohalarida o‘z loyihangizni e’lon qiling.</p>
+                    </div>
+
+                    <div class="section-action-tools">
+                        <div class="search-input-wrap">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="project-search-input" class="search-input" placeholder="Loyiha, ko‘nikma yoki toifa bo‘yicha qidiring...">
+                        </div>
+                        <button class="pl-btn pl-btn-lime" onclick="openCreateProjectModal()">
+                            <i class="fas fa-plus"></i> Yangi Loyiha
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Category Filter Tabs: All, IT, Ecology -->
+                <div class="category-filter-wrap">
+                    <button class="cat-filter-btn active" data-category="all" onclick="setProjectCategoryFilter('all')">
+                        <i class="fas fa-th-large"></i> Barchasi <span class="cat-count" id="cat-count-all">0</span>
+                    </button>
+                    <button class="cat-filter-btn cat-it" data-category="IT" onclick="setProjectCategoryFilter('IT')">
+                        <i class="fas fa-laptop-code"></i> 💻 IT Loyihalar <span class="cat-count" id="cat-count-it">0</span>
+                    </button>
+                    <button class="cat-filter-btn cat-eco" data-category="Ecology" onclick="setProjectCategoryFilter('Ecology')">
+                        <i class="fas fa-seedling"></i> 🌱 Ecology Loyihalar <span class="cat-count" id="cat-count-eco">0</span>
+                    </button>
+                </div>
+
+                <!-- Projects Grid (Injected by renderProjects() in js/app.js) -->
+                <div class="projects-grid" id="projects-container" style="margin-top: 1.5rem;">
+                    <!-- Project cards or clean empty state injected here -->
+                </div>
+            </section>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 3: ABOUT TAB (Comprehensive Platform Overview & FAQ)          -->
+        <!-- ================================================================== -->
+        <div class="view-wrapper" id="view-about">
+            <section class="container about-section">
+                <div class="section-header-block" style="margin-bottom: 2rem;">
+                    <div>
+                        <div class="section-label"><i class="fas fa-info-circle"></i> PLATFORMA HAQIDA // MISSION & VISION</div>
+                        <h2 class="section-title">ProjectLink Ekotizimi</h2>
+                        <p class="section-subtitle">O‘zbekistondagi yosh iste’dodlar, talabalar va tashabbuskorlar uchun hamkorlik maydoni</p>
+                    </div>
+                </div>
+
+                <!-- About Hero Card -->
+                <div class="about-hero-block">
+                    <h3 style="font-family: var(--font-hero); font-size: 1.8rem; text-transform: uppercase; margin-bottom: 1rem; color: var(--accent-lime);">
+                        Bizning Maqsadimiz
+                    </h3>
+                    <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        ProjectLink — O‘zbekistonlik maktab o‘quvchilari, kollej va oliy ta’lim talabalarining amaliy ko‘nikmalarini rivojlantirishga qaratilgan platformadir. Nazariy bilimlardan real amaliyotga o‘tish har doim qiyin kechadi. Biz yoshlarga jamoa tuzish, real loyihalarda qatnashish va raqamli portfolio yaratish imkonini taqdim etamiz.
+                    </p>
+                    <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.7; color: var(--text-secondary);">
+                        Platformamizdagi barcha loyihalar va tashabbuslar O‘zbekiston yoshlarining qiziqishlari hamda zamonaviy iqtisodiyot talablariga mos ravishda <strong style="color: var(--accent-lime);">11 ta asosiy strategik yo‘nalishga</strong> ajratilgan.
+                    </p>
+                </div>
+
+                <!-- 11 Dedicated Strategic Tracks -->
+                <div class="about-tracks-grid">
+                    <!-- 1. IT & Dasturlash -->
+                    <div class="about-track-card" style="border-top: 3px solid #38bdf8;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #38bdf8;">
+                                <i class="fas fa-laptop-code"></i> IT & Dasturlash
+                            </div>
+                            <span class="badge-category badge-it">💻 IT</span>
+                        </div>
+                        <p class="track-desc">
+                            Veb-saytlar, mobil ilovalar, backend xizmatlari, bulutli infratuzilma va ochiq ma’lumotlar bazasi ustida ishlaydigan jamoalar yo‘nalishi.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #38bdf8;"></i> React, Vue, Next.js frontend loyihalar</li>
+                            <li><i class="fas fa-check-circle" style="color: #38bdf8;"></i> Python, Node.js, Go backend xizmatlari</li>
+                            <li><i class="fas fa-check-circle" style="color: #38bdf8;"></i> Flutter va React Native mobil ilovalar</li>
+                        </ul>
+                    </div>
+
+                    <!-- 2. AI & Data Science -->
+                    <div class="about-track-card" style="border-top: 3px solid #a855f7;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #a855f7;">
+                                <i class="fas fa-brain"></i> AI & Data Science
+                            </div>
+                            <span class="badge-category" style="border-color: rgba(168,85,247,0.4); color: #a855f7; background: rgba(168,85,247,0.1);">🧠 AI</span>
+                        </div>
+                        <p class="track-desc">
+                            Sun’iy intellekt, neyrotarmoqlar, kompyuter ko‘rishi, ma’lumotlar tahlili va o‘zbek tili uchun NLP modellari yaratish.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #a855f7;"></i> LLM va aqlli chatbot modellar</li>
+                            <li><i class="fas fa-check-circle" style="color: #a855f7;"></i> Computer Vision va obyektlarni tanish</li>
+                            <li><i class="fas fa-check-circle" style="color: #a855f7;"></i> Data Science va bashoratlash tizimlari</li>
+                        </ul>
+                    </div>
+
+                    <!-- 3. Ta'lim & Ilm-fan -->
+                    <div class="about-track-card" style="border-top: 3px solid #3b82f6;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #3b82f6;">
+                                <i class="fas fa-graduation-cap"></i> Ta'lim & Ilm-fan
+                            </div>
+                            <span class="badge-category" style="border-color: rgba(59,130,246,0.4); color: #3b82f6; background: rgba(59,130,246,0.1);">🎓 EDTECH</span>
+                        </div>
+                        <p class="track-desc">
+                            Interaktiv o‘quv platformalari, olimpiada tizimlari, laboratoriya simulyatorlari va ilmiy tadqiqot loyihalari.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #3b82f6;"></i> Gamifikatsiyalashgan ta’lim ilovalari</li>
+                            <li><i class="fas fa-check-circle" style="color: #3b82f6;"></i> Onlayn test va olimpiada botlari</li>
+                            <li><i class="fas fa-check-circle" style="color: #3b82f6;"></i> Ilmiy maqolalar va ochiq ma’ruzalar bazasi</li>
+                        </ul>
+                    </div>
+
+                    <!-- 4. Ekologiya & Agrotech -->
+                    <div class="about-track-card" style="border-top: 3px solid #10b981;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #10b981;">
+                                <i class="fas fa-seedling"></i> Ekologiya & Agrotech
+                            </div>
+                            <span class="badge-category badge-ecology">🌱 ECOLOGY</span>
+                        </div>
+                        <p class="track-desc">
+                            Ekologik barqarorlik, chiqindilarni qayta ishlash, aqlli sug‘orish va energiya tejovchi texnologiyalar yo‘nalishi.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Chiqindilarni saralash va qayta ishlash</li>
+                            <li><i class="fas fa-check-circle" style="color: #10b981;"></i> IoT sensorlar orqali havo monitoringi</li>
+                            <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Qishloq xo‘jaligida aqlli tejamkor tizimlar</li>
+                        </ul>
+                    </div>
+
+                    <!-- 5. Volontyorlik & Social Impact -->
+                    <div class="about-track-card" style="border-top: 3px solid #f43f5e;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #f43f5e;">
+                                <i class="fas fa-hand-holding-heart"></i> Volontyorlik & Social Impact
+                            </div>
+                            <span class="badge-category" style="border-color: rgba(244,63,94,0.4); color: #f43f5e; background: rgba(244,63,94,0.1);">🤝 SOCIAL</span>
+                        </div>
+                        <p class="track-desc">
+                            Xayriya harakatlari, yoshlar tashabbuslari, ijtimoiy himoyaga muhtoj qatlamlarga ko‘mak beruvchi tizimlar.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #f43f5e;"></i> Volontyorlik harakati koordinatsiya portali</li>
+                            <li><i class="fas fa-check-circle" style="color: #f43f5e;"></i> Inklyuziv imkoniyati cheklanganlar uchun servislar</li>
+                            <li><i class="fas fa-check-circle" style="color: #f43f5e;"></i> Mahalliy yoshlar ijtimoiy dasturlari</li>
+                        </ul>
+                    </div>
+
+                    <!-- 6. Startup & Biznes -->
+                    <div class="about-track-card" style="border-top: 3px solid #f59e0b;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #f59e0b;">
+                                <i class="fas fa-rocket"></i> Startup & Biznes
+                            </div>
+                            <span class="badge-category" style="border-color: rgba(245,158,11,0.4); color: #f59e0b; background: rgba(245,158,11,0.1);">🚀 STARTUP</span>
+                        </div>
+                        <p class="track-desc">
+                            Bozor talablariga mos startap mahsulotlar, fintex yechimlar, e-tijorat va yoshlar tadbirkorligi loyihalari.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #f59e0b;"></i> Yangi tijoriy xizmatlar va MVP</li>
+                            <li><i class="fas fa-check-circle" style="color: #f59e0b;"></i> B2B va B2C raqamli platformalar</li>
+                            <li><i class="fas fa-check-circle" style="color: #f59e0b;"></i> Avtomatlashtirilgan to‘lov vositalari</li>
+                        </ul>
+                    </div>
+
+                    <!-- 7. Media & Kreativ -->
+                    <div class="about-track-card" style="border-top: 3px solid #ec4899;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #ec4899;">
+                                <i class="fas fa-film"></i> Media & Kreativ
+                            </div>
+                            <span class="badge-category" style="border-color: rgba(236,72,153,0.4); color: #ec4899; background: rgba(236,72,153,0.1);">🎬 MEDIA</span>
+                        </div>
+                        <p class="track-desc">
+                            Mobilografiya, video montaj, 3D animatsiya, brending, podkastlar va ijtimoiy media marketing loyihalari.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #ec4899;"></i> UI/UX dizayn tizimlari va brending</li>
+                            <li><i class="fas fa-check-circle" style="color: #ec4899;"></i> Hujjatli va ta’limiy video kontent</li>
+                            <li><i class="fas fa-check-circle" style="color: #ec4899;"></i> Kreativ audio podkastlar va media kanallar</li>
+                        </ul>
+                    </div>
+
+                    <!-- 8. Muhandislik & Robototexnika -->
+                    <div class="about-track-card" style="border-top: 3px solid #06b6d4;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #06b6d4;">
+                                <i class="fas fa-robot"></i> Muhandislik & Robototexnika
+                            </div>
+                            <span class="badge-category" style="border-color: rgba(6,182,212,0.4); color: #06b6d4; background: rgba(6,182,212,0.1);">🤖 ROBOTICS</span>
+                        </div>
+                        <p class="track-desc">
+                            Arduino, ESP32, mikrokontrollerlar, avtonom robotlar, dronlar va apparat dasturiy komplekslar.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #06b6d4;"></i> Avtonom robotik platformalar</li>
+                            <li><i class="fas fa-check-circle" style="color: #06b6d4;"></i> IoT aqlli uy va sanoat sensorlari</li>
+                            <li><i class="fas fa-check-circle" style="color: #06b6d4;"></i> Dronlar va telemetriya qurilmalari</li>
+                        </ul>
+                    </div>
+
+                    <!-- 9. Sog'liq & Sport -->
+                    <div class="about-track-card" style="border-top: 3px solid #ef4444;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #ef4444;">
+                                <i class="fas fa-heartbeat"></i> Sog'liq & Sport
+                            </div>
+                            <span class="badge-category" style="border-color: rgba(239,68,68,0.4); color: #ef4444; background: rgba(239,68,68,0.1);">❤️ HEALTH</span>
+                        </div>
+                        <p class="track-desc">
+                            HealthTech, tibbiy raqamli monitoring, sog‘lom turmush tarzi va sport musobaqalari platformalari.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #ef4444;"></i> Teletibbiyot va shifokor qabuli ilovalari</li>
+                            <li><i class="fas fa-check-circle" style="color: #ef4444;"></i> Fitnes va to‘g‘ri ovqatlanish trekerlari</li>
+                            <li><i class="fas fa-check-circle" style="color: #ef4444;"></i> Sport klublari va turnirlar tizimi</li>
+                        </ul>
+                    </div>
+
+                    <!-- 10. Shahar & Transport -->
+                    <div class="about-track-card" style="border-top: 3px solid #14b8a6;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #14b8a6;">
+                                <i class="fas fa-city"></i> Shahar & Transport
+                            </div>
+                            <span class="badge-category" style="border-color: rgba(20,184,166,0.4); color: #14b8a6; background: rgba(20,184,166,0.1);">🏙️ URBAN</span>
+                        </div>
+                        <p class="track-desc">
+                            Smart City, jamoat transporti qulayligi, yo‘l harakati tahlili va shahar infratuzilmasi yechimlari.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #14b8a6;"></i> Avtobus va metro jadval monitoringi</li>
+                            <li><i class="fas fa-check-circle" style="color: #14b8a6;"></i> Shahar muammolari bo‘yicha interaktiv xarita</li>
+                            <li><i class="fas fa-check-circle" style="color: #14b8a6;"></i> Eko-transport va veloyo‘laklar infratuzilmasi</li>
+                        </ul>
+                    </div>
+
+                    <!-- 11. Madaniyat & San'at -->
+                    <div class="about-track-card" style="border-top: 3px solid #eab308;">
+                        <div class="track-head">
+                            <div class="track-title" style="color: #eab308;">
+                                <i class="fas fa-palette"></i> Madaniyat & San'at
+                            </div>
+                            <span class="badge-category" style="border-color: rgba(234,179,8,0.4); color: #eab308; background: rgba(234,179,8,0.1);">🎨 CULTURE</span>
+                        </div>
+                        <p class="track-desc">
+                            Milliy merosni raqamlashtirish, virtual muzeylar, musiqa, adabiyot va raqamli san’at asarlari.
+                        </p>
+                        <ul class="track-list">
+                            <li><i class="fas fa-check-circle" style="color: #eab308;"></i> Tarixiy obidalar virtual 3D turlari</li>
+                            <li><i class="fas fa-check-circle" style="color: #eab308;"></i> O‘zbek mumtoz musiqasi va adabiyoti portali</li>
+                            <li><i class="fas fa-check-circle" style="color: #eab308;"></i> Yosh rassomlar raqamli ko‘rgazmasi</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Project Management & Applications Ownership Info -->
+                <div class="about-hero-block" style="border-left: 4px solid var(--accent-lime);">
+                    <h3 style="font-family: var(--font-hero); font-size: 1.5rem; text-transform: uppercase; color: var(--accent-lime); margin-bottom: 0.75rem;">
+                        <i class="fas fa-users-cog"></i> Jamoa va Arizalarni Boshqarish Qoidasi
+                    </h3>
+                    <p style="font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                        ProjectLink platformasida arizalarni tasdiqlash to‘liq loyiha muallifi (loyihani yaratgan yosh tashabbuskor) tomonidan amalga oshiriladi. Administratorlar nomzodlar arizasiga aralashmaydi — faqat loyiha egasining o‘zi tushgan arizalarni ko‘rib chiqadi, qabul qiladi yoki rad etadi.
+                    </p>
+                    <p style="font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary);">
+                        Platformadagi loyihalar 11 ta asosiy strategik yo‘nalishga ajratilgan bo‘lib, o‘quvchilar va talabalar o‘z qiziqishlariga mos yo‘nalishda jamoa topishlari mumkin.
+                    </p>
+                </div>
+
+                <!-- FAQ Accordion / Cards -->
+                <div style="margin-top: 3rem;">
+                    <div class="section-label">:KO‘P SO‘RALADIGAN SAVOLLAR:</div>
+                    <h2 class="section-title">FAQ</h2>
+
+                    <div class="faq-card">
+                        <div class="faq-q"><i class="fas fa-question-circle"></i> ProjectLink platformasida qanday qilib ro‘yxatdan o‘tish mumkin?</div>
+                        <div class="faq-a">Yuqori o‘ng burchakdagi "Ro'yxatdan o'tish" tugmasini bosing, ismingiz, emailingiz va parolingizni kiriting. Tizim avtomatik ravishda profilingizni yaratadi.</div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-q"><i class="fas fa-question-circle"></i> Loyihaga tushgan arizalarni kim tasdiqlaydi?</div>
+                        <div class="faq-a">Arizalarni faqatgina o‘sha loyihani yaratgan tashabbuskor (loyiha egasi) o‘z profilidagi "Arizalarni boshqarish" bo‘limidan ko‘rib chiqadi va tasdiqlaydi. Administratorlar arizalarni tasdiqlamaydi.</div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-q"><i class="fas fa-question-circle"></i> Loyihalar qanday toifalarga ajratiladi?</div>
+                        <div class="faq-a">Loyihalar 11 ta strategik yo‘nalishga (IT & Dasturlash, AI, Ta'lim, Ekologiya, Volontyorlik, Startup, Media, Muhandislik, Sog'liq, Transport, San'at) ajratiladi. Loyiha yaratuvchisi o‘z yo‘nalishini erkin tanlaydi.</div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-q"><i class="fas fa-question-circle"></i> Loyihaga ariza topshirish qanday ishlaydi?</div>
+                        <div class="faq-a">Projects bo‘limida o‘zingizga yoqqan loyiha kartasidagi "Ariza" tugmasini bosing, o‘z rolingiz va qisqacha tavsifingizni yozib yuboring. Loyiha muallifi arizangizni ko‘rib chiqib qabul qiladi.</div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-q"><i class="fas fa-question-circle"></i> Platformada qatnashish bepulmi?</div>
+                        <div class="faq-a">Ha, ProjectLink barcha o‘quvchilar va talabalar uchun 100% bepul va ochiq ta’lim-amaliyot ekotizimidir.</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 4: USER PROFILE VIEW (Dynamic Profile)                        -->
+        <!-- ================================================================== -->
+        <div class="view-wrapper" id="view-profile">
+            <!-- Dynamic profile injected by renderUserProfile() in js/app.js -->
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 5: ADMIN PANEL (Requirement 2 & 3: Lists & Category Selector) -->
+        <!-- ================================================================== -->
+        <div class="view-wrapper" id="view-admin">
+            <!-- Dynamic admin console injected by renderAdminPanel() in js/app.js -->
+        </div>
+    </main>
+
+    <!-- ================================================================== -->
+    <!-- MODALS & DRAWERS                                                   -->
+    <!-- ================================================================== -->
+
+    <!-- Requirement 1: Login Modal -->
+    <div class="modal-overlay modal" id="modal-login">
+        <div class="modal-card">
+            <div class="modal-header-bar">
+                <div class="modal-title">[ TIZIMGA KIRISH ]</div>
+                <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+            </div>
+            <form id="form-login" class="modal-body">
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Email Manzili *</label>
+                    <input type="email" name="email" class="form-input-pl" placeholder="Masalan: admin@projectlink.uz" required>
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Parol *</label>
+                    <input type="password" name="password" class="form-input-pl" placeholder="••••••••" required>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+                    <button type="button" class="pl-btn pl-btn-ghost" onclick="closeAllModals()">Bekor qilish</button>
+                    <button type="submit" class="pl-btn pl-btn-lime">[ KIRISH ] &rarr;</button>
+                </div>
+
+                <!-- Fast Demo Login Buttons for quick testing -->
+                <div class="demo-login-tray">
+                    <span class="demo-login-label"><i class="fas fa-bolt"></i> Tezkor demo kirish:</span>
+                    <div class="demo-login-btns">
+                        <button type="button" class="pl-btn pl-btn-ghost pl-btn-sm" onclick="loginAsDemo('admin')">
+                            <i class="fas fa-shield-alt"></i> Admin sifatida
+                        </button>
+                        <button type="button" class="pl-btn pl-btn-ghost pl-btn-sm" onclick="loginAsDemo('user')">
+                            <i class="fas fa-user"></i> Foydalanuvchi sifatida
+                        </button>
+                    </div>
+                </div>
+
+                <div class="auth-switch-prompt">
+                    Hisobingiz yo‘qmi? <a onclick="openRegisterModal()">Yangi hisob yaratish</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Requirement 1 & 2: Registration Modal with Referral Code Mechanism -->
+    <div class="modal-overlay modal" id="modal-register">
+        <div class="modal-card">
+            <div class="modal-header-bar">
+                <div class="modal-title">[ RO‘YXATDAN O‘TISH ]</div>
+                <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+            </div>
+            <form id="form-register" class="modal-body">
+                <div class="form-group-pl">
+                    <label class="form-label-pl">To‘liq Ismingiz *</label>
+                    <input type="text" name="name" class="form-input-pl" placeholder="Masalan: Shoxrux Qodirov" required>
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Email Manzili *</label>
+                    <input type="email" name="email" class="form-input-pl" placeholder="Masalan: shoxrux@example.com" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Parol *</label>
+                        <input type="password" name="password" class="form-input-pl" placeholder="Kamida 6 belgi" minlength="6" required>
+                    </div>
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Parolni Tasdiqlang *</label>
+                        <input type="password" name="confirmPassword" class="form-input-pl" placeholder="Parolni takrorlang" minlength="6" required>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+                    <button type="button" class="pl-btn pl-btn-ghost" onclick="closeAllModals()">Bekor qilish</button>
+                    <button type="submit" class="pl-btn pl-btn-paper">[ RO‘YXATDAN O‘TISH ] &rarr;</button>
+                </div>
+
+                <div class="auth-switch-prompt">
+                    Allaqachon hisobingiz bormi? <a onclick="openLoginModal()">Tizimga kirish</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Project Modal (with 11 Core Directions from Photo 4) -->
+    <div class="modal-overlay modal" id="modal-create-project">
+        <div class="modal-card">
+            <div class="modal-header-bar">
+                <div class="modal-title">[ + YANGI LOYIHA E’LON QILISH ]</div>
+                <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+            </div>
+            <form id="form-create-project" class="modal-body">
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Loyiha Nomi *</label>
+                    <input type="text" name="title" class="form-input-pl" placeholder="Masalan: Toshkent Chiqindilarni Saralash Tizimi" required>
+                </div>
+
+                <!-- 11 Core Directions Selector matching Photo 4 -->
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Loyiha Yo‘nalishi (Toifasi) *</label>
+                    <select name="category" class="form-select-pl" required>
+                        <option value="IT">💻 &lt;/&gt; IT & Dasturlash (Web, mobil, botlar, platformalar)</option>
+                        <option value="AI">🧠 AI & Data Science (Sun'iy intellekt, ML, chatbotlar)</option>
+                        <option value="Education">🎓 Ta'lim & Ilm-fan (EdTech, olimpiada, tadqiqot)</option>
+                        <option value="Ecology">🌱 Ekologiya & Agrotech (Atrof-muhit, qayta ishlash, agro)</option>
+                        <option value="Social">🤝 Volontyorlik & Social Impact (Xayriya, yoshlar tashabbusi)</option>
+                        <option value="Startup">🚀 Startup & Biznes (Yangi mahsulotlar, biznes loyihalar)</option>
+                        <option value="Media">🎬 Media & Kreativ (Mobilografiya, dizayn, SMM, media)</option>
+                        <option value="Robotics">🤖 Muhandislik & Robototexnika (Robotlar, IoT, dronlar)</option>
+                        <option value="Health">❤️ Sog'liq & Sport (HealthTech, salomatlik, sport)</option>
+                        <option value="Urban">🏙️ Shahar & Transport (Urbanistika, Smart City)</option>
+                        <option value="Culture">🎨 Madaniyat & San'at (Musiqa, teatr, ijodiy loyihalar)</option>
+                    </select>
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Zarur Mutaxassislik (Rol) *</label>
+                    <input type="text" name="roleNeeded" class="form-input-pl" placeholder="Masalan: Frontend Developer (React / TS) yoki Eko-Tadqiqotchi" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Manzil / Shahar</label>
+                        <input type="text" name="location" class="form-input-pl" placeholder="Toshkent / Masofaviy">
+                    </div>
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Topshirish Muddati</label>
+                        <input type="date" name="deadline" class="form-input-pl" value="2025-12-31">
+                    </div>
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Teglar (vergul bilan ajrating)</label>
+                    <input type="text" name="tags" class="form-input-pl" placeholder="React, Python, Ecology, OpenSource">
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Loyiha Haqida Qisqacha Tavsif *</label>
+                    <textarea name="description" rows="4" class="form-textarea-pl" placeholder="Loyihaning maqsadi nima? Qanday muammoni hal qiladi va jamoada qanday natijaga erishmoqchisiz?" required></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+                    <button type="button" class="pl-btn pl-btn-ghost" onclick="closeAllModals()">Bekor qilish</button>
+                    <button type="submit" class="pl-btn pl-btn-lime">[ E’LON QILISH ] &rarr;</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Apply to Project Modal -->
+    <div class="modal-overlay modal" id="modal-apply">
+        <div class="modal-card">
+            <div class="modal-header-bar">
+                <div>
+                    <div class="modal-title">[ ARIZA TOPSHIRISH ]</div>
+                    <div id="apply-project-title" style="font-family: var(--font-tech); font-size: 0.75rem; color: var(--accent-lime); margin-top: 2px;"></div>
+                </div>
+                <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+            </div>
+            <form id="form-apply" class="modal-body">
+                <div id="apply-role-display" style="font-family: var(--font-tech); font-size: 0.8rem; color: var(--text-secondary); background: rgba(255,255,255,0.06); padding: 0.75rem; border: 1px solid var(--border);"></div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Siz Bajarmoqchi Bo‘lgan Rol</label>
+                    <input type="text" name="role" class="form-input-pl" placeholder="Masalan: Frontend Engineer yoki Eko-Tahlilchi">
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Nega aynan siz bu loyihaga mos kelishingizni yozing (Pitch) *</label>
+                    <textarea name="note" rows="5" class="form-textarea-pl" placeholder="Tajribangiz, mavjud ishlaringiz va ushbu jamoada qanday foyda keltirishingiz mumkinligi haqida batafsil yozing..." required></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+                    <button type="button" class="pl-btn pl-btn-ghost" onclick="closeAllModals()">Yopish</button>
+                    <button type="submit" class="pl-btn pl-btn-paper">[ ARIZANI YUBORISH ] &rarr;</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Project Details Specs Modal -->
+    <div class="modal-overlay modal" id="modal-project-details">
+        <div class="modal-card">
+            <div class="modal-header-bar">
+                <div class="modal-title">[ LOYIHA DETALLARI ]</div>
+                <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+            </div>
+            <div class="modal-body" id="project-details-content">
+                <!-- Injected via openProjectDetailsModal() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Internal Discord-Style Chat Modal -->
+    <div class="modal-overlay modal" id="modal-project-chat">
+        <div class="modal-card discord-modal-dialog">
+            <div class="modal-header-bar" style="background: #020312; border-bottom: 1px solid var(--border);">
+                <div class="modal-title" id="discord-modal-header-title">
+                    <i class="fab fa-discord" style="color: #5865f2;"></i> [ LOYIHA JAMOAVIY CHATI // DISCORD STYLE ]
+                </div>
+                <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+            </div>
+            <div class="discord-server-layout" id="discord-server-container">
+                <!-- Injected via openProjectChat(projectId) in js/app.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay modal" id="modal-edit-profile">
+        <div class="modal-card">
+            <div class="modal-header-bar">
+                <div class="modal-title">[ PROFILNI TAHRIRLASH ]</div>
+                <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+            </div>
+            <form id="form-edit-profile" class="modal-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">To‘liq Ismingiz *</label>
+                        <input type="text" name="name" class="form-input-pl" required>
+                    </div>
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Kasbiy Unvon / Rol *</label>
+                        <input type="text" name="title" class="form-input-pl" required>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1rem;">
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Universitet / Maktab</label>
+                        <input type="text" name="university" class="form-input-pl">
+                    </div>
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Yosh</label>
+                        <input type="number" name="age" class="form-input-pl" min="12" max="60">
+                    </div>
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Manzil (Shahar, Viloyat)</label>
+                    <input type="text" name="location" class="form-input-pl">
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">O‘zingiz haqingizda (Bio)</label>
+                    <textarea name="bio" rows="3" class="form-textarea-pl"></textarea>
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Ko‘nikmalar (vergul bilan ajrating)</label>
+                    <input type="text" name="skills" class="form-input-pl" placeholder="React, Python, Ecology, Figma, Docker">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">Telegram Havola</label>
+                        <input type="text" name="telegram" class="form-input-pl" placeholder="https://t.me/username">
+                    </div>
+                    <div class="form-group-pl">
+                        <label class="form-label-pl">GitHub Havola</label>
+                        <input type="text" name="github" class="form-input-pl" placeholder="https://github.com/username">
+                    </div>
+                </div>
+
+                <div class="form-group-pl">
+                    <label class="form-label-pl">Portfolio Havolasi</label>
+                    <input type="text" name="portfolio" class="form-input-pl" placeholder="https://mywebsite.uz">
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+                    <button type="button" class="pl-btn pl-btn-ghost" onclick="closeAllModals()">Bekor qilish</button>
+                    <button type="submit" class="pl-btn pl-btn-lime">[ SAQLASH ] &rarr;</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Clean Footer -->
+    <footer class="pl-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand-title">PROJECTLINK // PLATFORM</div>
+                    <p class="footer-desc">
+                        O‘zbekistondagi o‘quvchilar va talabalar uchun mahalliy loyihalar, jamoa tuzish va amaliy ko‘nikmalarni rivojlantirish platformasi. IT va Ekologiya sohalaridagi ilg‘or tashabbuslarni birlashtiradi.
+                    </p>
+                </div>
+                
+                <div>
+                    <div class="footer-col-title">:EKOTIZIM BO‘LIMLARI:</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#main" class="footer-link" onclick="switchView('main')">&rarr; Asosiy Sahifa (Main)</a></li>
+                        <li><a href="#projects" class="footer-link" onclick="switchView('projects')">&rarr; Loyihalar Katalogi (Projects)</a></li>
+                        <li><a href="#about" class="footer-link" onclick="switchView('about')">&rarr; Platforma Haqida (About)</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">:ALOQA VA HAMJAMIYAT:</div>
+                    <ul class="footer-links-list">
+                        <li><a href="https://t.me/projectlink_uz" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fab fa-telegram"></i> Telegram Kanal: @projectlink_uz</a></li>
+                        <li><a href="https://t.me/projectlink_bot" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fas fa-robot"></i> Telegram Bot: @projectlink_bot</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2025 ProjectLink. O‘zbekiston yoshlar platformasi. Barcha huquqlar himoyalangan.</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Welcome Auth Gate Modal (Prompts user upon entering if not logged in) -->
+    <div class="modal-overlay modal" id="modal-welcome-auth">
+        <div class="modal-card" style="max-width: 520px;">
+            <div class="modal-header-bar">
+                <div class="modal-title">[ PROJECTLINK // XUSH KELIBSIZ ]</div>
+                <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 1.75rem;">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div style="font-size: 2.2rem; color: var(--accent-lime); margin-bottom: 0.5rem;"><i class="fas fa-rocket"></i></div>
+                    <h3 style="font-family: var(--font-hero); font-size: 1.6rem; text-transform: uppercase;">Platformaga Xush Kelibsiz!</h3>
+                    <p style="font-family: var(--font-tech); font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.4rem; line-height: 1.5;">
+                        Loyiha e’lon qilish, jamoalarga qo‘shilish va ariza topshirish uchun profilingizga kiring yoki yangi hisob oching.
+                    </p>
+                </div>
+
+                <div class="auth-tabs-toggle">
+                    <button type="button" class="auth-tab-btn active" id="tab-btn-welcome-login" onclick="switchWelcomeTab('login')">
+                        <i class="fas fa-sign-in-alt"></i> Kirish
+                    </button>
+                    <button type="button" class="auth-tab-btn" id="tab-btn-welcome-register" onclick="switchWelcomeTab('register')">
+                        <i class="fas fa-user-plus"></i> Ro'yxatdan O'tish
+                    </button>
+                </div>
+
+                <!-- Tab 1: Login Form -->
+                <div id="welcome-pane-login">
+                    <form id="form-welcome-login">
+                        <div class="form-group-pl">
+                            <label class="form-label-pl">Email Manzili *</label>
+                            <input type="email" name="email" class="form-input-pl" placeholder="Masalan: azizbek@projectlink.uz" required>
+                        </div>
+                        <div class="form-group-pl">
+                            <label class="form-label-pl">Parol *</label>
+                            <input type="password" name="password" class="form-input-pl" placeholder="••••••••" required>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
+                            <button type="button" class="pl-btn pl-btn-ghost pl-btn-sm" onclick="closeAllModals()">
+                                Mehmon sifatida ko‘rish
+                            </button>
+                            <button type="submit" class="pl-btn pl-btn-lime">
+                                [ KIRISH ] &rarr;
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tab 2: Register Form -->
+                <div id="welcome-pane-register" style="display: none;">
+                    <form id="form-welcome-register">
+                        <div class="form-group-pl">
+                            <label class="form-label-pl">To‘liq Ismingiz *</label>
+                            <input type="text" name="name" class="form-input-pl" placeholder="Masalan: Dilnoza Rahimova" required>
+                        </div>
+                        <div class="form-group-pl">
+                            <label class="form-label-pl">Email Manzili *</label>
+                            <input type="email" name="email" class="form-input-pl" placeholder="Masalan: dilnoza@example.com" required>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                            <div class="form-group-pl">
+                                <label class="form-label-pl">Parol *</label>
+                                <input type="password" name="password" class="form-input-pl" placeholder="Kamida 6 belgi" minlength="6" required>
+                            </div>
+                            <div class="form-group-pl">
+                                <label class="form-label-pl">Parolni Qaytaring *</label>
+                                <input type="password" name="confirmPassword" class="form-input-pl" placeholder="Takrorlang" minlength="6" required>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
+                            <button type="button" class="pl-btn pl-btn-ghost pl-btn-sm" onclick="closeAllModals()">
+                                Mehmon sifatida ko‘rish
+                            </button>
+                            <button type="submit" class="pl-btn pl-btn-paper">
+                                [ RO‘YXATDAN O‘TISH ] &rarr;
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Engine Script -->
+    <script src="js/app.js"></script>
+</body>
+</html>
